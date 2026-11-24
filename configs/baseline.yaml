@@ -1,0 +1,18 @@
+# PCA heuristic baseline (no learning). python scripts/run_baseline.py --config configs/baseline.yaml
+name: baseline_pca
+data_config: configs/data_cornell.yaml
+splits:
+  objectwise: data/splits/cornell_objectwise.json
+  imagewise: data/splits/cornell_imagewise.json
+subsets: [val, test]          # val = the only place a design choice was made (see PLAN.md)
+
+baseline:
+  height_thresh: 0.01         # 1 cm above the table (proposal)
+  margin_px: 10               # proposal
+  max_w_px: 150               # gripper limit = W normalisation constant
+  exclude_border_components: true   # chosen on the object-wise val split (back wall)
+  jaw_ratio: 0.5              # h = w / 2 (GG-CNN convention, same for all models)
+
+eval:
+  angle_thresh_deg: 30
+  iou_thresh: 0.25

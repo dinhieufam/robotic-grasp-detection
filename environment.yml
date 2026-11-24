@@ -1,0 +1,22 @@
+# Create with:
+#   conda env create -p /mnt/users/$USER/envs/grasp -f environment.yml
+#   conda activate /mnt/users/$USER/envs/grasp && pip install -e .
+name: grasp
+channels: [conda-forge]
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu124
+      - torch
+      - torchvision
+      - opencv-python-headless
+      - scikit-image
+      - shapely
+      - numpy
+      - matplotlib
+      - pyyaml
+      - tensorboard
+      - pytest
+      - tqdm
+      - kaggle

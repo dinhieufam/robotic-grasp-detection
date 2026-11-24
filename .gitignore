@@ -218,3 +218,28 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project: data and outputs live on /mnt/users (symlinks) — never commit
+/data
+/runs
+/checkpoints
+*.npz
+*.pt
+*.pth
+slurm-*.out
+*.out
+
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.log
+*.synctex.gz
+docs/**/*.out
+
+# Private docs — never commit
+CLAUDE.md
+docs/PLAN.md
+docs/vishc_server_guide.md
+docs/progress_report/
+docs/project_proposal/

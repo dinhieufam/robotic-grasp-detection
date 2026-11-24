@@ -1,0 +1,44 @@
+# Cornell preprocessing (proposal "Data Processing" steps 1-5).
+# Used by scripts/preprocess_cornell.py; augmentation params (step 6) are read by
+# the training configs from the `augment` block below.
+seed: 0
+
+paths:
+  raw: data/cornell/raw                       # Kaggle mirror oneoneliu/cornell-grasp
+  object_ids: data/cornell/processed_orig/z.txt
+  cache: data/cornell/cache/cornell_224.npz
+  splits_dir: data/splits
+  stats_dir: runs/data_stats
+
+labels:                     # step 1
+  min_rect_size_px: 1.0     # drop rectangles with opening or jaw < this (zero width)
+
+depth:                      # step 2
+  inpaint_radius_px: 3      # cv2.inpaint, Telea (2004)
+  normalise: table          # table: height above RANSAC table plane (3D) | mean: Euclidean depth minus image mean (proposal)
+  table_fit: {thresh_m: 0.005, iters: 300}
+  clip: 1.0                 # metres
+
+crop:                       # step 3
+  size_px: 300              # square crop, centred on the mean positive-grasp centre
+  out_px: 224
+  max_missing_depth: 0.30   # drop image if > 30% of crop pixels have no depth
+  outside_policy: drop_image  # rectangle corner outside crop -> drop_image | drop_rect
+
+label_maps:                 # step 4 (generated on the fly in the Dataset)
+  shrink: 0.3333333333      # middle third along the opening axis
+  w_scale: 150.0            # W = w / 150
+
+split:                      # step 5
+  fractions: [0.70, 0.15, 0.15]   # train / val / test
+
+augment:                    # step 6 (training only)
+  rotate_deg: 180
+  translate_px: 20
+  zoom: [0.8, 1.0]          # crop factor; image is magnified by 1/zoom
+  brightness: 0.2
+  contrast: 0.2
+  saturation: 0.2
+  depth_noise_sigma: 0.003  # metres
+  dropout_patches_max: 4
+  dropout_patch_px: [4, 16]
